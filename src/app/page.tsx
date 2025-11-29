@@ -1,13 +1,17 @@
-"use client";
 import Hero from "@/components/Hero";
 import TrendingNow from "@/components/TrendingNow";
-import { usePopularMovies } from "@/lib/usePopularMovies";
-export default function Home() {
-  const { movies, error, loading } = usePopularMovies();
+import { getPopularMovies } from "@/lib/api";
 
-  if (error) return <div>Error: {error}</div>;
-  if (loading) return <div>Loading...</div>;
-  if (!movies) return <div>No movies found.</div>;
+export default async function Home() {
+  let movies;
+
+  try {
+    movies = await getPopularMovies();
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error fetching popular movies:", error);
+    }
+  }
 
   return (
     <main>

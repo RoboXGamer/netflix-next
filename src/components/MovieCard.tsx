@@ -1,3 +1,4 @@
+"use client";
 import { Card } from "@/components/ui/card";
 import type { Movie } from "../types";
 const TMDB_IMAGES_ASSET_URL = "https://image.tmdb.org/t/p/w500/";

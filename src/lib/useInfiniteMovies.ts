@@ -16,7 +16,7 @@ async function fetchMoviesPage(page: number, token: string): Promise<TMDBRespons
 }
 
 export function useInfiniteMovies() {
-    const token = import.meta.env.VITE_TMDB_AUTH_TOKEN
+    const token = process.env.TMDB_AUTH_TOKEN
 
     return useInfiniteQuery({
         queryKey: ['infinite-movies'],
