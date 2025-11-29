@@ -18,7 +18,11 @@ export default async function Home() {
       <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <Hero />
         <div className="container mx-auto mt-6 max-w-6xl px-6">
-          <TrendingNow movies={movies} />
+          {movies ? (
+            <TrendingNow movies={movies} />
+          ) : (
+            <div>Error fetching popular movies</div>
+          )}
         </div>
       </div>
     </main>
