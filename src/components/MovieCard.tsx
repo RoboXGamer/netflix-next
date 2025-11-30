@@ -1,11 +1,12 @@
-"use client";
+import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import type { Movie } from "../types";
+
 const TMDB_IMAGES_ASSET_URL = "https://image.tmdb.org/t/p/w500/";
 
 const MovieCard = ({ movie }: { movie: Movie }) => {
   return (
-    <button onClick={() => console.log("Movie clicked: ", movie?.title)}>
+    <Link href={`/movie/${movie.id}`} className="block">
       <Card className="rounded-sm transition-all duration-300 hover:scale-105 hover:shadow-xl outline-blue-200 p-0 lg:px-2 border-0 w-28 h-[9.8rem] md:w-45 md:h-63">
         <img
           src={
@@ -18,7 +19,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
           loading="lazy"
         />
       </Card>
-    </button>
+    </Link>
   );
 };
 

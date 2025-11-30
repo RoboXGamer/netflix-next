@@ -1,12 +1,6 @@
 "use client";
 import Link from "next/link";
 import SearchBar from "./SearchBar";
-// import {
-//   SignedIn,
-//   SignedOut,
-//   SignInButton,
-//   UserButton,
-// } from "@clerk/clerk-react";
 
 const Header = () => {
   return (
@@ -21,13 +15,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* <SignedOut> */}
-          {/* <SignInButton /> */}
-          {/* </SignedOut> */}
-          {/* <SignedIn> */}
           <SearchBar />
-          {/* <UserButton /> */}
-          {/* </SignedIn> */}
         </div>
       </div>
     </header>

@@ -1,36 +1,43 @@
 import { Search } from "lucide-react";
-import { useState } from "react";
-import useSearchStore from "@/store/searchStore";
-import useBaseMovieStore from "@/store/moviesStore";
-import performSearch from "@/lib/performSearch";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { debounce } from "@/lib/utils";
+
+const DEBOUNCE_DELAY = 400;
 
 export default function SearchBar() {
   const [shouldShowSearch, setShouldShowSearch] = useState(false);
-
-  const baseMovies = useBaseMovieStore((state) => state.baseMovies);
-  const setResults = useSearchStore((state) => state.setResults);
-
+  const [inputValue, setInputValue] = useState("");
   const router = useRouter();
 
-  const searchQuery = (query: string) => {
-    const matchingTitles = performSearch(query, baseMovies);
-    setResults(matchingTitles.data);
-  };
+  const debouncedPushRef = useRef<ReturnType<typeof debounce> | null>(null);
+
+  useEffect(() => {
+    debouncedPushRef.current = debounce((query: string) => {
+      if (query.trim()) {
+        router.push("/search?movie=" + encodeURIComponent(query.trim()));
+      } else {
+        router.push("/search");
+      }
+    }, DEBOUNCE_DELAY);
+
+    return () => {
+      debouncedPushRef.current?.cancel();
+    };
+  }, [router]);
 
   const handleSearchQueryChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const query = event.target.value;
-
-    searchQuery(query);
-    router.push("/search?movie=" + query);
-    // navigate({ to: "/search", search: { movie: query } });
+    setInputValue(query);
+    debouncedPushRef.current?.(query);
   };
 
   const handleBlur = () => {
-    setShouldShowSearch(false);
+    setTimeout(() => setShouldShowSearch(false), 200);
   };
+
   const handleSearchClick = () => {
     setShouldShowSearch(true);
   };
@@ -45,6 +52,7 @@ export default function SearchBar() {
             type="text"
             placeholder="Titles, people, genres"
             aria-label="Search"
+            value={inputValue}
             onChange={handleSearchQueryChange}
             onBlur={handleBlur}
             autoFocus

@@ -1,5 +1,6 @@
 import MovieCard from "@/components/MovieCard";
 import performSearch from "@/lib/performSearch";
+import { fetchWithRetry } from "@/lib/utils";
 
 import type { TMDBResponse } from "@/types";
 
@@ -15,10 +16,13 @@ export default async function SearchComponent({
   const token = process.env.TMDB_AUTH_TOKEN;
   let baseMovies: TMDBResponse["results"] = [];
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetchWithRetry(API_URL, {
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${token}`,
+      },
+      next: {
+        revalidate: 3600,
       },
     });
     if (!response.ok) {
